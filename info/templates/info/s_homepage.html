@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block content %}
+<section class="text-gray-600 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="lg:w-4/5 mx-auto flex flex-col items-center">
+            <img alt="profile" class="w-48 h-48 object-cover object-center rounded mb-4" src="https://dummyimage.com/400x400">
+            <div class="w-full text-center">
+                <h2 class="text-sm title-font text-gray-500 tracking-widest">USER PROFILE</h2>
+                <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">{{ user.name }}</h1>
+                <div class="flex justify-center mb-4">
+                    <span class="flex items-center">
+                        <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-indigo-500" viewBox="0 0 24 24">
+                        </svg>
+                    </span>
+                </div>
+                <div class="w-full mb-5">
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Name:</span>
+                        <span class="text-gray-900">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Roll No:</span>
+                        <span class="text-gray-900">{{ request.user.student.uni_rno }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Program:</span>
+                        <span class="text-gray-900">{{ request.user.student.program }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Semester:</span>
+                        <span class="text-gray-900">{{ request.user.student.semester }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Contact No:</span>
+                        <span class="text-gray-900">{{ request.user.student.contact_no }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="mr-3 font-semibold">Date of Birth:</span>
+                        <span class="text-gray-900">{{ request.user.student.DOB }}</span>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <button class="flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
