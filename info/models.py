@@ -77,7 +77,7 @@ class TeacherCourse(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.teacher - self.course}"
+        return f"{self.teacher} - {self.course}"
 
 class StudentCourse(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -91,11 +91,17 @@ class StudentCourse(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.student - self.course}"
+        return f"{self.student} - {self.course}"
 
     def get_attendance(self):
-        a = AttendanceTotal.objects.get(student = self.student, course = self.course)
-        return a.attendance
+        attendance_records = Attendance.objects.filter(studentcourse=self)
+        total_attendance = attendance_records.count()
+        present_attendance = attendance_records.filter(status=True).count()
+        return {
+            "total": total_attendance,
+            "present": present_attendance,
+            "percentage": round(present_attendance / total_attendance * 100, 2) if total_attendance > 0 else 0
+        }
 
     def get_marks(self):
         exam_records = Exam.objects.filter(studentcourse=self)
@@ -113,42 +119,19 @@ class StudentCourse(models.Model):
         }
 
 class Attendance(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    studentcourse = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
     date = models.DateField()
     status = models.BooleanField(default=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["student", "course", "date"], name="unique_attendance"
+                fields=["studentcourse", "date"], name="unique_attendance"
             )
         ]
     
     def __str__(self):
-        return f"{self.student} - {self.course} - Date {self.date} - {self.status}"
-    
-class AttendanceTotal(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["student", "course"], name="unique_attendancetotal"
-            )
-        ]
-
-    @property
-    def attendance(self):
-        attendance_records = Attendance.objects.filter(student=self.student, course=self.course)
-        total_attendance = attendance_records.count()
-        present_attendance = attendance_records.filter(status=True).count()
-        return {
-            "total": total_attendance,
-            "present": present_attendance,
-            "percentage": round(present_attendance / total_attendance * 100, 2) if total_attendance > 0 else 0
-        }
+        return f"{self.studentcourse} - Date {self.date} - {self.status}"
 
 class Exam(models.Model):
     studentcourse = models.ForeignKey(StudentCourse, on_delete=models.CASCADE)
