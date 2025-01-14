@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block content %}
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-col text-center w-full mb-20">
+      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Attendance</h1>
+    </div>
+    <form method="post" class="lg:w-1/2 md:w-2/3 mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+      {% csrf_token %}
+      <div class="flex flex-wrap -m-2">
+        <div class="w-full p-2">
+          <div class="relative">
+            <label for="{{ form.date.id_for_label }}" class="leading-7 text-sm text-gray-600">Date: </label>
+            {{ form.date }}
+            {% if form.date.errors %}
+              <p class="text-red-500 text-xs italic mt-1">{{ form.date.errors }}</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="w-full p-2">
+          <div class="relative">
+            <label for="{{ form.course.id_for_label }}" class="leading-7 text-sm text-gray-600">Course: </label>
+            {{ form.course }}
+            {% if form.course.errors %}
+              <p class="text-red-500 text-xs italic mt-1">{{ form.course.errors }}</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="w-full p-2 mt-4">
+          <button 
+            type="submit" 
+            class="w-full text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 rounded text-lg px-8 py-2">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock content %}
